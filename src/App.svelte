@@ -5,7 +5,7 @@
   import viteLogo from '/vite.svg'
   import Counter from './lib/Counter.svelte'
 
-	let url = "https://github.com/Valentinatruppia/vite-project/blob/main/incidenti.json"
+	let url = "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidenti.json"
 	
 	import fetchStore from './fetch.js'
 	const [data, loading, error, get] = fetchStore(url)
