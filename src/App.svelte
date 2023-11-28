@@ -1,8 +1,28 @@
 <script>
+// @ts-nocheck
+
   import svelteLogo from './assets/svelte.svg'
   import viteLogo from '/vite.svg'
   import Counter from './lib/Counter.svelte'
+
+	let url = "https://github.com/Valentinatruppia/vite-project/blob/main/incidenti.json"
+	
+	import fetchStore from './fetch.js'
+	const [data, loading, error, get] = fetchStore(url)
 </script>
+
+<button on:click={get}>
+	Fetch again
+</button>
+
+{#if $loading}
+	Loading: {$loading}
+{:else if $error}
+	Error: {$error}
+{:else}
+	<pre>{JSON.stringify($data, null, 2)}</pre>
+{/if}
+
 
 <main>
   <div>
