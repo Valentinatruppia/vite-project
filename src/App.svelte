@@ -8,11 +8,12 @@
 	import VolunteerCards from './Table/VolunteerCards.svelte';
 	let name = 'world';
 </script>
-
+	<h1>CRASH ANALYZER</h1>
 <Menu />  	
 <VolunteerCards />
 
 <main>
+
 	<section class="content">
     <button on:click={get}>
     Fetch again
@@ -35,7 +36,7 @@
 		padding: 0;
 	}
 	main {
-		display: grid;
+		text-align:center;
 		grid-template:
 			"nav content" min-content
 	}
