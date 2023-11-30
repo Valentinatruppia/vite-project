@@ -1,93 +1,149 @@
-
 <script>
-	import { fade } from 'svelte/transition';
-    import menu from '/src/assets/menu.png'
-	
-	const fadeIn = {
-		delay: 100,
-		duration: 200
-	}
-	
-	const fadeOut = {
-		delay: 0,
-		duration: 100
-	}
-	
-	let isExpanded = false;
-</script>
-
-<nav class:expanded={isExpanded}>
-	<button on:click={() => isExpanded = !isExpanded}>
-		{#if isExpanded}
-        <a>
-            <img src="menu" >
-        </a>
-		{:else}
-        <a>
-            <img src="menu" >
-        </a>
-		{/if}
-	</button>
-	<ul>
-		<li>🚀 {#if isExpanded}<span in:fade="{fadeIn}" out:fade="{fadeOut}">Home</span>{/if}</li>
-		<li>⭐️ {#if isExpanded}<span in:fade="{fadeIn}" out:fade="{fadeOut}">Statistiche</span>{/if}</li>
+	// 	let navWidth = 0;
+		let navOpen = false;
 		
-	</ul>
-	{#if isExpanded}
-	<section in:fade="{fadeIn}" out:fade="{fadeOut}" >
-		<hr />
-		<ul>
-			<h3>
-				Contatti:
-			</h3>
-			<li>valentinatruppia@gmail.com</li>
-			<li>3665436483</li>
-		</ul>
-	</section>
-	{/if}
-</nav>
-
-<style>
-	nav {
-		grid-area: nav;
-		height: 100vw;
-		background-color: #324754;
-		color: #A2B7C4;
-		transition: ease-out 200ms;
-		width: 60px;
-		overflow: hidden;
-	}
-
-	.expanded {
-		transition: ease-out 200ms;
-		width: 200px;
+		function handleNav() {
+			navOpen = !navOpen;
+	// 		navWidth === 0 ? navWidth = 40 : navWidth = 0;
+		}
+		
+	function handleNavWithKey(e) {
+		console.log(e.code);
+		if (e.code === "F1") {
+			navOpen = !navOpen;
+		}
+	}	
+		
+	// 	const openNav = () => {
+	// 		navOpen = !navOpen;
+	// 		navWidth = 40;
+	// 	}
+		
+	// 	const closeNav = () => {
+	// 		navOpen = !navOpen;
+	// 		navWidth = 0;
+	// 	}	
+	</script>
+	
+	<div id="mySidenav" class="sidenav" class:open={navOpen}>
+	  <a href="#a" class="closebtn" on:click={handleNav}>&times;</a>
+	  <a href="#b">About</a>
+	  <a href="#c">Services</a>
+	  <a href="#d">Clients</a>
+	  <a href="#e">Contact</a>
+	</div>
+	
+	 <!-- Use to open the sidenav -->
+	 <!-- 	<span on:click={handleNav}>open</span> -->
+		
+		<!-- Use Menu Icon to open the sidenav -->
+		<div class="container" class:change={navOpen} on:click={handleNav}>
+			<div class="bar1"></div>
+			<div class="bar2"></div>
+			<div class="bar3"></div>
+		</div>
+	
+		<!-- Add some margin-left to this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page) -->
+		<div id="main" class:pushMainToRight={navOpen}>
+		
+		</div>
+	
+	<!-- Use keyboard to handle the sidenav -->
+	<svelte:window on:keydown={handleNavWithKey} />
+	
+	<style>
+	/* Hamburger Menu icon */	
+	.container {
+		position: absolute;
+		right: 10%;
+	  display: inline-block;
+	  cursor: pointer;
 	}
 	
-	ul {
-		list-style: none;
-		padding: 20px;
-		margin: 0;
+	.bar1, .bar2, .bar3 {
+	  width: 35px;
+	  height: 5px;
+	  background-color: #333;
+	  margin: 6px 0;
+	  transition: 0.4s;
 	}
 	
-	li {
-		width: 200px;
+	.change .bar1 {
+	  -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+	  transform: rotate(-45deg) translate(-9px, 6px);
 	}
 	
-	h3 {
-		text-transform: uppercase;
-		margin: 0;
-		padding: 10px 0;
+	.change .bar2 {opacity: 0;}
+	
+	.change .bar3 {
+	  -webkit-transform: rotate(45deg) translate(-8px, -8px);
+	  transform: rotate(45deg) translate(-8px, -8px);
+	}
+		
+	/* span {
+		position: absolute;
+		right: 20%;
+		display: inline-block;
+		cursor: pointer;
+	}	 */
+		
+	/* The side navigation menu */
+	.sidenav {
+	  height: 100%; 
+	  width: 0; /* 0 width - change this with JavaScript */
+	  position: fixed;
+	  z-index: 1;
+	  top: 0;
+	  left: 0;
+	  background-color: #111; 
+	  overflow-x: hidden; /* Disable horizontal scroll */
+	  padding-top: 60px;
+	  transition: 0.5s;
 	}
 	
-	hr {
-	  color: white;
-		width: 80%;
+	/* The navigation menu links */
+	.sidenav a {
+	  padding: 8px 8px 8px 32px;
+	  text-decoration: none;
+	  font-size: 25px;
+	  color: #818181;
+	  display: block;
+	  transition: 0.3s;
 	}
 	
-	button {
-		border: none;
-		background: none;
-		color: #A2B7C4;
-		text-transform: uppercase;
+	/* When you mouse over the navigation links, change their color */
+	.sidenav a:hover {
+	  color: #f1f1f1;
 	}
-</style>
+	
+	/* Position and style the close button (top right corner) */
+	.sidenav .closebtn {
+	  position: absolute;
+	  top: 0;
+	  right: 25px;
+	  font-size: 36px;
+	  margin-left: 50px;
+	}
+	
+	/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+	#main {
+	  transition: all .5s;
+	  padding: 20px;
+	}
+		
+	.pushMainToRight {
+		margin-left: 40%
+	/* 	transform: translate3d(40%, 0, 0); */
+		
+	}	
+		
+	.open {
+		width: 40%;
+	}	
+	
+	/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+	@media screen and (max-height: 450px) {
+	  .sidenav {padding-top: 15px;}
+	  .sidenav a {font-size: 18px;}
+	}
+	</style>

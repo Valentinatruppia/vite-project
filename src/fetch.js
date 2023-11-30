@@ -16,8 +16,6 @@ export default function (url) {
 		}
 		loading.set(false)
 	}
-	
-	get()
-	
+	get();
 	return [ data, loading, error, get]
 }

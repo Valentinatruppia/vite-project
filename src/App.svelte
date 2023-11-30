@@ -5,7 +5,7 @@
 	import fetchStore from './fetch.js'
 	const [data, loading, error, get] = fetchStore(url)
 	import Menu from './lib/Menu.svelte'
-	
+	import VolunteerCards from './Table/VolunteerCards.svelte';
 	let name = 'world';
 </script>
 
@@ -13,10 +13,12 @@
 
 <main>
   <h1>CRASH ANALYZER</h1>
+  
 	<Menu />
-	<section class="content">
-		<h1>Hello {name}!</h1>
 
+  	<VolunteerCards />
+  	
+	<section class="content">
     <button on:click={get}>
     Fetch again
     </button>
