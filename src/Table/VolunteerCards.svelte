@@ -1,5 +1,5 @@
-
 <script>
+	// @ts-nocheck
 	import { flip } from 'svelte/animate';
 	import Spinner from './spinner.svelte';
 	
@@ -149,6 +149,6 @@
 	
 	td {
 		padding-right: 16px;
-    padding-left: 16px;
+    	padding-left: 16px;
 	}
 </style>

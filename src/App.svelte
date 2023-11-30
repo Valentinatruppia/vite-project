@@ -9,15 +9,10 @@
 	let name = 'world';
 </script>
 
-
+<Menu />  	
+<VolunteerCards />
 
 <main>
-  <h1>CRASH ANALYZER</h1>
-  
-	<Menu />
-
-  	<VolunteerCards />
-  	
 	<section class="content">
     <button on:click={get}>
     Fetch again

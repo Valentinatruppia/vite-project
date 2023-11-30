@@ -4,7 +4,7 @@
 		
 		function handleNav() {
 			navOpen = !navOpen;
-	// 		navWidth === 0 ? navWidth = 40 : navWidth = 0;
+	// 		navWidth === 0 ? navWidth = 40 : navWidth  = 0;
 		}
 		
 	function handleNavWithKey(e) {
@@ -23,18 +23,15 @@
 	// 		navOpen = !navOpen;
 	// 		navWidth = 0;
 	// 	}	
-	</script>
+</script>
 	
 	<div id="mySidenav" class="sidenav" class:open={navOpen}>
 	  <a href="#a" class="closebtn" on:click={handleNav}>&times;</a>
-	  <a href="#b">About</a>
-	  <a href="#c">Services</a>
-	  <a href="#d">Clients</a>
+	  <a href="#c">Home</a>
+	  <a href="#d">Statistics</a>
 	  <a href="#e">Contact</a>
 	</div>
 	
-	 <!-- Use to open the sidenav -->
-	 <!-- 	<span on:click={handleNav}>open</span> -->
 		
 		<!-- Use Menu Icon to open the sidenav -->
 		<div class="container" class:change={navOpen} on:click={handleNav}>
@@ -45,14 +42,13 @@
 	
 		<!-- Add some margin-left to this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page) -->
 		<div id="main" class:pushMainToRight={navOpen}>
-		
+			<h2> </h2>
 		</div>
 	
 	<!-- Use keyboard to handle the sidenav -->
 	<svelte:window on:keydown={handleNavWithKey} />
 	
 	<style>
-	/* Hamburger Menu icon */	
 	.container {
 		position: absolute;
 		right: 10%;
@@ -79,13 +75,6 @@
 	  -webkit-transform: rotate(45deg) translate(-8px, -8px);
 	  transform: rotate(45deg) translate(-8px, -8px);
 	}
-		
-	/* span {
-		position: absolute;
-		right: 20%;
-		display: inline-block;
-		cursor: pointer;
-	}	 */
 		
 	/* The side navigation menu */
 	.sidenav {
