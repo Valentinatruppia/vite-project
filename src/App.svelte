@@ -7,13 +7,17 @@
 	import Menu from './lib/Menu.svelte'
 	import VolunteerCards from './Table/VolunteerCards.svelte';
 	let name = 'world';
+	import DataTable from '../DataTable.svelte';
+  import FadeExample from './FadeExample.svelte';
+
 </script>
 	<h1>CRASH ANALYZER</h1>
 <Menu />  	
 <VolunteerCards />
 
 <main>
-
+	
+	<FadeExample />
 	<section class="content">
     <button on:click={get}>
     Fetch again
@@ -27,6 +31,8 @@
       <pre>{JSON.stringify($data, null, 2)}</pre>
     {/if}
 	</section> 
+	<h1>Tabella Dati Incidenti</h1>
+  <DataTable {incidents} />
 </main>
 
 <style>
