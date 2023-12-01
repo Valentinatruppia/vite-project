@@ -33,7 +33,7 @@
 	
 	
 	let promise = getThings();
-	
+
 	function onDelete(id) {
 		things = things.filter(t => t.id != id)
 	}
@@ -65,13 +65,11 @@
 	
 </script>
 
-<button on:click={sort("IDProtocollo")}>IDProtocollo &varr;</button>
+<button on:click={() => sort("IDProtocollo")}>IDProtocollo &varr;</button>
 
-
-{#await promise}
+{#await promise then getThings}
 	<Spinner/>
-{:then getThings}
-
+	
 <table>
 	<thead>
 	<tr>
@@ -80,17 +78,21 @@
 {/each}
 	</tr>
 	</thead>
-	<tbody>
-		
-		{#each things as thing, index (thing.id)}
-
-		<tr>
-			{#each colNames as col, index}
-			<td>{thing[col]}</td>
-			{/each}
-		</tr>
-		{/each}
-	
+	<tbody>     
+		{#each rowkeys as incident (incident)}       
+		<tr>         
+			<td>{incident.IDProtocollo}</td>         
+			<td>{incident.IDVeicolo}</td>         
+			<td>{incident.Progressivo}</td>     
+			<td>{incident.TipoPersona}</td>   
+			<td>{incident.Sesso}</td>   
+			<td>{incident.TipoLesione}</td>   
+			<td>{incident.Deceduto}</td>   
+			<td>{incident.CinturaCascoUtilizzato}</td>   
+			<td>{incident.Airbag}</td>   
+			<td>{incident.DecedutoDopo}</td>       
+		</tr>     
+		{/each}   
 	</tbody>
 </table>
 

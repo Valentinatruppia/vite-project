@@ -27,9 +27,11 @@
 	
 	<div id="mySidenav" class="sidenav" class:open={navOpen}>
 	  <a href="#a" class="closebtn" on:click={handleNav}>&times;</a>
-	  <a href="#c">Home</a>
+	  <a href="#a">Home</a>
 	  <a href="#d">Statistics</a>
-	  <a href="#e">Contact</a>
+	  <p>Contacts: </p>
+	  <b>Valentinatruppia@gmail.com</b>
+	  <b>3665439236</b>
 	</div>
 	
 		
@@ -99,7 +101,22 @@
 	  display: block;
 	  transition: 0.3s;
 	}
-	
+	.sidenav p {
+	  padding: 8px 8px 8px 32px;
+	  text-decoration: none;
+	  font-size: 25px;
+	  color: #818181;
+	  display: block;
+	  transition: 0.3s;
+	}
+	.sidenav b {
+	  padding: 8px 8px 8px 32px;
+	  text-decoration: none;
+	  font-size: 15px;
+	  color: #0000FF;
+	  display: block;
+	  transition: 0.3s;
+	}
 	/* When you mouse over the navigation links, change their color */
 	.sidenav a:hover {
 	  color: #f1f1f1;

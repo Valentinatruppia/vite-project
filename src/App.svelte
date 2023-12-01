@@ -1,7 +1,7 @@
 <script>
 // @ts-nocheck
 	let url = "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidenti.json"
-	
+
 	import fetchStore from './fetch.js'
 	const [data, loading, error, get] = fetchStore(url)
 	import Menu from './lib/Menu.svelte'
@@ -13,7 +13,6 @@
 <VolunteerCards />
 
 <main>
-
 	<section class="content">
     <button on:click={get}>
     Fetch again
@@ -26,7 +25,8 @@
     {:else}
       <pre>{JSON.stringify($data, null, 2)}</pre>
     {/if}
-	</section> 
+	</section>
+
 </main>
 
 <style>
