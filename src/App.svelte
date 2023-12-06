@@ -6,7 +6,8 @@
 	const [data, loading, error, get] = fetchStore(url)
 	import Menu from './lib/Menu.svelte'
 	import VolunteerCards from './Table/VolunteerCards.svelte';
-	let name = 'world';
+	import DataTable from './DataTable.svelte';
+
 </script>
 	<h1>CRASH ANALYZER</h1>
 <Menu />  	
@@ -25,8 +26,10 @@
     {:else}
       <pre>{JSON.stringify($data, null, 2)}</pre>
     {/if}
-	</section>
 
+	</section>
+	<h1>Tabella Dati Incidenti</h1>
+  <DataTable />
 </main>
 
 <style>

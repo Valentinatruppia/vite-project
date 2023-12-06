@@ -1,5 +1,7 @@
+
 <script>
 	import { fly } from 'svelte/transition';
+
 	let idveicolo = true;
 	let status = 'waiting...';
 </script>

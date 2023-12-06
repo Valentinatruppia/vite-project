@@ -1,5 +1,7 @@
+
 <script>
 	import { fly } from 'svelte/transition';
+
 	let progressivo = true;
 	let status = 'waiting...';
 </script>
