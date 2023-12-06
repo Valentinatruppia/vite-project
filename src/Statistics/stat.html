@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <title>STATISTICS</title>
+    <h1>STATISTICS</h1>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+    <a>
+        <button type="button">maschi e femmine</button>
+        <button type="button">................</button>
+        <button type="button">----------------</button>
+        <button type="button">''''''''''''''''</button>
+        <button type="button">,,,,,,,,,,,,,,,,</button>
+    </a>
+
+    <canvas id="myChart" width="1200" height="600" style="border:1px solid #000000;"></canvas>
+    <script>
+    let array = [0];
+    fetchDati();
+    let y = [];
+
+
+
+    async function fetchDati() {
+
+        try {
+            // Effettua la richiesta fetch e attendi la risposta
+            const response = await fetch("https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidenti.json");
+            if (!response.ok) {
+            throw new Error(`Errore HTTP: ${response.status}`);
+            }
+            const data = await response.json();
+            data.forEach((element)=> {
+                array.push(element)
+            });//popola l'array locale
+            const Maschi=array.filter(s => s["Sesso"]==="M" && s["TipoPersona"]==="Conducente");
+            const Femmine=array.filter(s => s["Sesso"]==="F" && s["TipoPersona"]==="Conducente");
+            y = [Maschi.length,Femmine.length];
+            PlotIstogramma();
+/*
+            console.log("array completo: ",array);
+            const anno=array.filter(a => a["Anno"]===2019);
+            console.log("filtro con anno 2019: ",anno);
+            const giorno=array.filter(g => g["Giorno"]==="Lunedi");
+            console.log("filtro con giorno lunedi: ",giorno);
+            const totale1=array.reduce((accumulatore, smc)=> accumulatore+smc["Totale (Smc)"],1);
+            console.log("reduce smc: ",totale1);
+            const smc=array.filter(smc => smc["Totale (Smc)"]>6641610);
+            console.log("filtro con smc>6641610: ",smc);
+*/
+        } catch (error) {
+            console.error(`Impossibile recuperare i dati: ${error}`);
+        }
+    }
+    
+
+    function PlotIstogramma() {
+
+        new Chart("myChart", {
+            type: "pie",
+            data: {
+                labels: ["Maschi","Femmine"],
+                datasets: [{
+                    label: "Numero incidenti",
+                    backgroundColor: [
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 99, 132)'],
+                    data: y
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Distribution of Incidents by Gender'
+                    }
+                },
+            responsive:false
+        }
+        });
+    }
+    </script>
+</body>
+</html>

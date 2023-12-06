@@ -36,6 +36,8 @@
 	
 		
 		<!-- Use Menu Icon to open the sidenav -->
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div class="container" class:change={navOpen} on:click={handleNav}>
 			<div class="bar1"></div>
 			<div class="bar2"></div>
