@@ -1,47 +1,99 @@
+<script>
+
+  import Menu from '../lib/Menu.svelte';
+
+</script>
 <!DOCTYPE html>
 <html lang="it">
-    <head>
-        <title>STATISTICS</title>
-        <h1>STATISTICS</h1>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <style>
-        body {
-                overflow-y: scroll; /* Enable vertical scrolling for the entire page */
-                margin: 0; /* Remove default margin to avoid unnecessary space */
-            }
+    <main>
+	<h1>CRASH ANALYZER</h1>
+    <Menu />
+    </main>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STATISTICS</title>
 
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                background-color: #f4f4f4;
+            }
+    
+            header {
+                text-align: center;
+                padding: 40px 0;
+                background-color: #4285f4;
+                color: #fff;
+                margin-bottom: 20px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+    
+            h1 {
+                font-size: 2em;
+                margin: 0;
+            }
+    
+            .buttons-container {
+                display: flex;
+                justify-content: center;
+                margin: 20px 0;
+            }
+    
+            button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            }
+    
             .charts-container {
                 display: flex;
+                justify-content: space-around;
                 margin: 20px;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
-
+    
             canvas {
-                border: 1px solid #000000;
-                margin-bottom: 20px; /* Add some space between charts */
+                border: 1px solid #ccc;
+                margin-bottom: 20px;
+                max-width: 100%; /* Adapts canvas size */
+                border-radius: 5px;
             }
         </style>
-    </head>
-    <body>
-        <a>
-            <button type="button">maschi e femmine</button>
-            <button type="button">................</button>
-            <button type="button">----------------</button>
-            <button type="button">''''''''''''''''</button>
-            <button type="button">,,,,,,,,,,,,,,,,</button>
-        </a>
+</head>
 
-        <div class="charts-container">
-            <canvas id="myChart" width="800" height="500"></canvas>
-            <canvas id="myChartPast" width="800" height="500"></canvas>
-        </div>
-        <script>
+<body>
+    <header>
+        <h1>STATISTICS</h1>
+        
+    </header>
+
+    <div class="buttons-container">
+        <button type="button">Maschi e Femmine</button>
+        <button type="button">................</button>
+        <button type="button">----------------</button>
+        <button type="button">''''''''''''''''</button>
+        <button type="button">,,,,,,,,,,,,,,,,</button>
+    </div>
+
+    <div class="charts-container">
+        <canvas id="myChart" width="400" height="300"></canvas>
+        <canvas id="myChartPast" width="400" height="300"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
         let array = [0];
         let arraypast = [0];
         fetchDati(), fetchDatiPast();
         let y = [];
         let yPast = [];
-
-
 
         async function fetchDati() {
 
@@ -159,5 +211,5 @@
             });
         }
         </script>
-    </body>
+</body>
 </html>

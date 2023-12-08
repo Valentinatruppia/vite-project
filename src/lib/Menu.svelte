@@ -28,7 +28,7 @@
 	<div id="mySidenav" class="sidenav" class:open={navOpen}>
 	  <a href="#a" class="closebtn" on:click={handleNav}>&times;</a>
 	  <a href="/src/index.html">Home</a>
-	  <a href="/src/Statistics/stat.html">Statistics</a>
+	  <a href="/src/Statistics/stat.svelte">Statistics</a>
 	  <p>Contacts: </p>
 	  <b>Valentinatruppia@gmail.com</b>
 	  <b>3665439236</b>
