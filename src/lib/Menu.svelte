@@ -1,57 +1,41 @@
 <script>
-	// 	let navWidth = 0;
-		let navOpen = false;
-		
-		function handleNav() {
-			navOpen = !navOpen;
-	// 		navWidth === 0 ? navWidth = 40 : navWidth  = 0;
-		}
-		
+	let navOpen = false;
+  
+	function handleNav() {
+	  navOpen = !navOpen;
+	}
+  
 	function handleNavWithKey(e) {
-		console.log(e.code);
-		if (e.code === "F1") {
-			navOpen = !navOpen;
-		}
-	}	
-		
-	// 	const openNav = () => {
-	// 		navOpen = !navOpen;
-	// 		navWidth = 40;
-	// 	}
-		
-	// 	const closeNav = () => {
-	// 		navOpen = !navOpen;
-	// 		navWidth = 0;
-	// 	}	
-</script>
-	
-	<div id="mySidenav" class="sidenav" class:open={navOpen}>
-	  <a href="#a" class="closebtn" on:click={handleNav}>&times;</a>
-	  <a href="/src/index.html">Home</a>
-	  <a href="/src/Statistics/stat.svelte">Statistics</a>
-	  <p>Contacts: </p>
-	  <b>Valentinatruppia@gmail.com</b>
-	  <b>3665439236</b>
+	  if (e.code === "F1") {
+		navOpen = !navOpen;
+	  }
+	}
+  </script>
+  
+  <div id="mySidenav" class="sidenav" class:open={navOpen}>
+	<a href="#a" class="closebtn" on:click={handleNav}>&times;</a>
+	<a href="/src/index.html">Home</a>
+	<a href="/src/Statistics/stat.svelte">Statistics</a>
+	<div class="contacts">
+		<p>Contacts: </p>
+		<a href="mailto:valentinatruppia@gmail.com">Valentinatruppia@gmail.com</a>
+		<a href="tel:+393665439236">3665439236</a>
 	</div>
-	
-		
-		<!-- Use Menu Icon to open the sidenav -->
-		<!-- svelte-ignore a11y-no-static-element-interactions -->
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div class="container" class:change={navOpen} on:click={handleNav}>
-			<div class="bar1"></div>
-			<div class="bar2"></div>
-			<div class="bar3"></div>
-		</div>
-	
-		<!-- Add some margin-left to this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page) -->
-		<div id="main" class:pushMainToRight={navOpen}>
-			<h2> </h2>
-		</div>
-	
-	<!-- Use keyboard to handle the sidenav -->
-	<svelte:window on:keydown={handleNavWithKey} />
-	
+
+  </div>
+  
+  <div class="container" class:change={navOpen} on:click={handleNav}>
+	<div class="bar1"></div>
+	<div class="bar2"></div>
+	<div class="bar3"></div>
+  </div>
+  
+  <div id="main" class:pushMainToRight={navOpen}>
+	<h2> </h2>
+  </div>
+  
+  <svelte:window on:keydown={handleNavWithKey} />
+
 	<style>
 	.container {
 		position: absolute;
@@ -104,21 +88,22 @@
 	  transition: 0.3s;
 	}
 	.sidenav p {
-	  padding: 8px 8px 8px 32px;
+	  padding: 450px 8px 8px 32px;
 	  text-decoration: none;
 	  font-size: 25px;
 	  color: #818181;
 	  display: block;
 	  transition: 0.3s;
 	}
-	.sidenav b {
-	  padding: 8px 8px 8px 32px;
+	.sidenav .contacts a{
+	  padding: 2px 8px 8px 32px;
 	  text-decoration: none;
 	  font-size: 15px;
 	  color: #0000FF;
 	  display: block;
 	  transition: 0.3s;
 	}
+	
 	/* When you mouse over the navigation links, change their color */
 	.sidenav a:hover {
 	  color: #f1f1f1;

@@ -1,5 +1,5 @@
 <script>
-	import Menu from './lib/Menu.svelte'
+	import Menu from './lib/Menu.svelte';
 	import DataTable from './Table/DataTable.svelte';
 	import DataTablePast from './Table/DataTablePast.svelte';
 </script>
@@ -8,7 +8,7 @@
 	<h1>CRASH ANALYZER</h1>
 
 	<section class="content">
-		<h2>Tabella Dati Incidenti</h2>
+		<h2>Tabelle Dati Incidenti</h2>
 		<Menu />
 
 		<div class="tables-container">
@@ -34,7 +34,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		min-height: 100vh;
+		min-height: 130vh;
 	}
 
 	h1 {
@@ -46,16 +46,16 @@
 
 
 	.content {
-		width: 100%;
+		width: 110%;
 		max-width: 9000px; /* Set a maximum width for the content */
-		padding: 20px;
+		padding: 15px;
 		background-color: #fff;
 		box-shadow: 0 2px 4px rgba(66, 56, 56, 1); /* Slight box shadow */
-		border-radius: 20px;
-		margin-top: 20px; /* Aggiunto spazio sopra il contenuto */
-		margin-bottom: 20px; /* Aggiunto spazio sotto il contenuto */
-        margin-left: 20px;  /* Aggiunto margine sinistro */
-        margin-right: 20px; /* Aggiunto margine destro */
+		border-radius: 15px;
+		margin-top: 15px; /* Aggiunto spazio sopra il contenuto */
+		margin-bottom: 15px; /* Aggiunto spazio sotto il contenuto */
+        margin-left: 15px;  /* Aggiunto margine sinistro */
+        margin-right: 15px; /* Aggiunto margine destro */
 	}
     
 
@@ -63,12 +63,15 @@
 		font-size: 1.8em;
 		color: #1565c0; /* Blue color */
 		margin-bottom: 20px;
+		margin-top: 20px;
 	}
 
 	.tables-container {
 		display: flex;
 		justify-content: space-between; /* Spazio uniforme tra le tabelle */
 		margin-top: 2px; /* Aumentato il margine superiore per più spazio */
+		margin-left: 10px;  /* Aggiunto margine sinistro */
+        margin-right: 10px; /* Aggiunto margine destro */
 	}
 
 	.table-separator {
