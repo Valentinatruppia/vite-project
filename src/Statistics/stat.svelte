@@ -1,8 +1,8 @@
 <title>STATISTICS</title>
-<script type="module">
+<!-- <script type="module">
   import Menu from "../lib/Menu.svelte";
   require(Menu);
-</script>
+</script> -->
 <script>
 function myFunction() {
         window.location.href = '../index.html';
@@ -11,13 +11,14 @@ function myFunction() {
 
 <main>
   <h1>CRASH ANALYZER</h1>
-  <section class="content">
-    <button onclick="myFunction()">Click me</button>
+  <!-- <section class="content">
+    <button onclick="myFunction()">Back to home</button>
 
     <Menu />
-  </section>
+  </section> -->
 </main>
 <body>   
+  <meta charset="utf-8" />
   <header>
     <h1>STATISTICS</h1>
   </header>
@@ -30,17 +31,24 @@ function myFunction() {
     <button type="button">,,,,,,,,,,,,,,,,</button>
   </div>
 
-  <div class="charts-container">
-    <canvas id="myChart" width="400" height="300"></canvas>
-    <canvas id="myChartPast" width="400" height="300"></canvas>
+  <div class="charts-container first-group">
+    <canvas id="myChartMF" width="400" height="300"></canvas>
+    <canvas id="myChartMFPast" width="400" height="300"></canvas>
   </div>
+
+  <div class="charts-container second-group">
+    <canvas id="myChartAirbag" width="400" height="300"></canvas>
+    <canvas id="myChartAirbagPast" width="400" height="300"></canvas>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     let array = [0];
     let arraypast = [0];
-    fetchDati(), fetchDatiPast();
+    fetchDati(), fetchDatiPast(),fetchDatiAirbag(),fetchDatiAirbagPast();
     let y = [];
     let yPast = [];
+    //////////////////////////////////////////////////////////////////////////////////
     async function fetchDati() {
       try {
         // Effettua la richiesta fetch e attendi la risposta
@@ -54,6 +62,7 @@ function myFunction() {
         data.forEach((element) => {
           array.push(element);
         }); //popola l'array locale
+        //filtro maschi vs femmine
         const Maschi = array.filter(
           (s) => s["Sesso"] === "M" && s["TipoPersona"] === "Conducente"
         );
@@ -78,6 +87,7 @@ function myFunction() {
       }
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     async function fetchDatiPast() {
       try {
         // Effettua la richiesta fetch e attendi la risposta
@@ -99,6 +109,7 @@ function myFunction() {
         );
         yPast = [MaschiPast.length, FemminePast.length];
         PlotIstogrammaPast();
+
         /*
                 console.log("array completo: ",array);
                 const anno=array.filter(a => a["Anno"]===2019);
@@ -115,8 +126,65 @@ function myFunction() {
       }
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    async function fetchDatiAirbag() {
+      try {
+        // Effettua la richiesta fetch e attendi la risposta
+        const response = await fetch(
+          "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidenti.json"
+        );
+        if (!response.ok) {
+          throw new Error(`Errore HTTP: ${response.status}`);
+        }
+        const data = await response.json();
+        data.forEach((element) => {
+          array.push(element);
+        }); //popola l'array locale
+        //Gravità incidenti(Airbag)
+        const Airbag_ine = array.filter(
+          (i) => i["Airbag"] == "Inesistente");
+        const Airbag_esploso = array.filter(
+          (e) => e["Airbag"] == "Esploso");
+        const Airbag_inesploso = array.filter(
+          (n) => n["Airbag"] == "Inesploso");
+        y_Airbag=[Airbag_ine.length,Airbag_esploso.length,Airbag_inesploso.length];
+        PlotIstogrammaAirbag();
+      } catch (error) {
+        console.error(`Impossibile recuperare i dati: ${error}`);
+      }
+    }
+        //////////////////////////////////////////////////////////////////////////////////////////////
+
+    async function fetchDatiAirbagPast() {
+      try {
+        // Effettua la richiesta fetch e attendi la risposta
+        const response = await fetch(
+          "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidentipast.json"
+        );
+        if (!response.ok) {
+          throw new Error(`Errore HTTP: ${response.status}`);
+        }
+        const data = await response.json();
+        data.forEach((element) => {
+          array.push(element);
+        }); //popola l'array locale
+        //Gravità incidenti(Airbag)
+        const Airbag_ine = array.filter(
+          (i) => i["Airbag"] == "Inesistente");
+        const Airbag_esploso = array.filter(
+          (e) => e["Airbag"] == "Esploso");
+        const Airbag_inesploso = array.filter(
+          (n) => n["Airbag"] == "Inesploso");
+        y_AirbagPast=[Airbag_ine.length,Airbag_esploso.length,Airbag_inesploso.length];
+        PlotIstogrammaAirbagPast();
+      } catch (error) {
+        console.error(`Impossibile recuperare i dati: ${error}`);
+      }
+    }
+        //////////////////////////////////////////////////////////////////////////////////////////////
+
     function PlotIstogramma() {
-      new Chart("myChart", {
+      new Chart("myChartMF", {
         type: "pie",
         data: {
           labels: ["Maschi", "Femmine"],
@@ -140,7 +208,7 @@ function myFunction() {
       });
     }
     function PlotIstogrammaPast() {
-      new Chart("myChartPast", {
+      new Chart("myChartMFPast", {
         type: "pie",
         data: {
           labels: ["Maschi", "Femmine"],
@@ -163,6 +231,56 @@ function myFunction() {
         },
       });
     }
+
+    function PlotIstogrammaAirbag() {
+      new Chart("myChartAirbag", {
+        type: "pie",
+        data: {
+          labels: ["Inesistente", "Esploso", "Inesploso"],
+          datasets: [
+            {
+              label: "Gravita' incidenti(Airbag)",
+              backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(120, 99, 140)"],
+              data: y_Airbag,
+            },
+          ],
+        },
+        options: {
+          plugins: {
+            title: {
+              display: true,
+              text: "Distribution of Incidents by Gravity(Airbag 2022)",
+            },
+          },
+          responsive: false,
+        },
+      });
+    }
+    
+    function PlotIstogrammaAirbagPast() {
+      new Chart("myChartAirbagPast", {
+        type: "pie",
+        data: {
+          labels: ["Inesistente", "Esploso", "Inesploso"],
+          datasets: [
+            {
+              label: "Gravita' incidenti(Airbag)",
+              backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(120, 99, 140)"],
+              data: y_AirbagPast,
+            },
+          ],
+        },
+        options: {
+          plugins: {
+            title: {
+              display: true,
+              text: "Distribution of Incidents by Gravity(Airbag 2008)",
+            },
+          },
+          responsive: false,
+        },
+      });
+    }
   </script>
 </body>
 
@@ -173,18 +291,18 @@ function myFunction() {
     min-height: 10vh;
   }
 
-  .content {
+/* .content {
     width: 100%;
-    max-width: 9000px; /* Set a maximum width for the content */
+    max-width: 9000px; 
     padding: 20px;
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(66, 56, 56, 1); /* Slight box shadow */
+    box-shadow: 0 2px 4px rgba(66, 56, 56, 1);
     border-radius: 20px;
-    margin-top: 20px; /* Aggiunto spazio sopra il contenuto */
-    margin-bottom: 20px; /* Aggiunto spazio sotto il contenuto */
-    margin-left: 20px; /* Aggiunto margine sinistro */
-    margin-right: 20px; /* Aggiunto margine destro */
-  }
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}*/
   :global(body) {
     overflow-y: scroll;
     font-family: Arial, sans-serif;
@@ -230,6 +348,16 @@ function myFunction() {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
+  .first-group {
+      background-color: #f8f8f8; /* Cambia il colore di sfondo */
+      padding: 15px; /* Modifica il padding se necessario */
+    }
+
+    /* Aggiungi stili specifici per il secondo gruppo di grafici */
+    .second-group {
+      background-color: #ececec; /* Cambia il colore di sfondo */
+      padding: 15px; /* Modifica il padding se necessario */
+    }
 
   canvas {
     border: 1px solid #ccc;
