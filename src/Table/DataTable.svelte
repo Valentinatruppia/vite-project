@@ -9,37 +9,6 @@
   });
 </script>
 
-<style>
-  body {
-    overflow: hidden; /* Impedisce lo scrolling sulla pagina principale */
-    margin: 0; /* Rimuove il margine predefinito */
-  }
-
-  .tabella-container {
-    max-width: 95vw; /* Imposta la larghezza massima a 95% della larghezza della viewport */
-    max-height: 80vh; /* Imposta l'altezza massima a 80% dell'altezza della viewport */
-    overflow-y: auto;  /* Abilita lo scrolling verticale se necessario */
-    margin: 20px auto; /* Aggiunge margine per una migliore presentazione e centra la tabella */
-  }
-
-  .tabella {
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  .tabella th, .tabella td {
-    border: 2px solid black; /* Imposta i bordi a 2px di spessore e colore nero */
-    padding: 8px;
-    text-align: left;
-  }
-
-  .tabella th {
-    background-color: #f2f2f2;
-    position: sticky;
-    top: 0;
-  }
-</style>
-
 {#if dati.length > 0}
   <div class="tabella-container">
     <table class="tabella">
@@ -64,3 +33,35 @@
 {:else}
   <p>Caricamento dati...</p>
 {/if}
+
+<style>
+  body {
+    overflow: hidden;
+    margin: 0;
+  }
+
+  .tabella-container {
+    max-width: 95vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    margin: 20px auto; 
+  }
+
+  .tabella {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .tabella th, .tabella td {
+    border: 2px solid black;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .tabella th {
+    background-color: #f2f2f2;
+    position: sticky;
+    top: 0;
+  }
+</style>
+
