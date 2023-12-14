@@ -4,11 +4,30 @@
   require(Menu);
 </script> -->
 <script>
+   import { onMount } from "svelte";
+
+  onMount(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  });
+
+  function handleKeyPress(event) {
+    if (event.key === "Escape") {
+      goBack();
+    }
+  }
+
+  function goBack() {
+    window.history.back();
+  }
 function myFunction() {
+  
         window.location.href = '../index.html';
+        
 }
 </script>
-
 <main>
   <h1>CRASH ANALYZER</h1>
   <!-- <section class="content">
@@ -25,10 +44,11 @@ function myFunction() {
   
   <div class="buttons-container">
     <button type="button" >Maschi e Femmine</button>
-    <button type="button">................</button>
-    <button type="button">----------------</button>
-    <button type="button">''''''''''''''''</button>
-    <button type="button">,,,,,,,,,,,,,,,,</button>
+    <button type="button">Distribution of Incidents by Gravity(Airbag)</button>
+    <button type="button">Distribution of Drivers and Passenger</button>
+    <button type="button">Distribution of Progressivo</button>
+    <button type="button">Distribution of Injury Types</button>
+    <button type="button">Distribution of Seatbelt/Helmet Usage</button>
   </div>
 
   <div class="charts-container first-group">
@@ -40,9 +60,28 @@ function myFunction() {
     <canvas id="myChartAirbag" width="400" height="300"></canvas>
     <canvas id="myChartAirbagPast" width="400" height="300"></canvas>
   </div>
+  <div class="charts-container third-group">
+    <canvas id="myChartConducenti" width="400" height="300"></canvas>
+    <canvas id="myChartConducentiPast" width="400" height="300"></canvas>
+  </div>
+  <div class="charts-container fourth-group">
+    <canvas id="myChartProgressivo" width="400" height="300"></canvas>
+    <canvas id="myChartProgressivoPast" width="400" height="300"></canvas>
+  </div>
+  <div class="charts-container fifth-group">
+    <canvas id="myChartLesioni" width="400" height="300"></canvas>
+    <canvas id="myChartLesioniPast" width="400" height="300"></canvas>
+  </div>
+  <div class="charts-container six-group">
+    <canvas id="myChartCinturaCasco" width="400" height="300"></canvas>
+    <canvas id="myChartCinturaCascoPast" width="400" height="300"></canvas>
+  </div>
+    
+    
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
+
     let array = [0];
     let arraypast = [0];
     fetchDati(), fetchDatiPast(),fetchDatiAirbag(),fetchDatiAirbagPast();
@@ -281,10 +320,646 @@ function myFunction() {
         },
       });
     }
+
+
+
+
+
+
+
+//grafico con i conducenti
+
+async function fetchDatiConducenti() {
+  try {
+    const response = await fetch(
+      "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidenti.json"
+    );
+    if (!response.ok) {
+      throw new Error(`Errore HTTP: ${response.status}`);
+    }
+    const data = await response.json();
+
+    const conducenti = data.filter((persona) => persona["TipoPersona"] === "Conducente");
+    const percentualeConducenti = (conducenti.length / data.length) * 100;
+
+    plotIstogrammaConducenti(percentualeConducenti, "myChartConducenti", "Distribution of Drivers and Passenger");
+  } catch (error) {
+    console.error(`Impossibile recuperare i dati: ${error}`);
+  }
+}
+
+// Aggiungi questa funzione per visualizzare il grafico della percentuale di conducenti
+function plotIstogrammaConducenti(percentualeConducenti, chartId, titleText) {
+  const canvasElement = document.getElementById(chartId);
+
+  if (!canvasElement) {
+    console.error(`Elemento canvas non trovato con id ${chartId}`);
+    return;
+  }
+
+  new Chart(canvasElement, {
+    type: "pie",  // Cambiato da "doughnut" a "pie"
+    data: {
+      labels: ["Altri", "Conducenti"],
+      datasets: [
+        {
+          data: [100 - percentualeConducenti, percentualeConducenti],
+          backgroundColor: ["rgb(220, 220, 220)", "rgb(54, 162, 235)"],
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: titleText,
+        },
+      },
+      responsive: false,
+    },
+  });
+}
+
+// Chiamata alla funzione per ottenere e visualizzare i dati
+fetchDatiConducenti();
+
+
+
+
+
+
+
+
+
+
+
+
+//tabella 2008
+
+async function fetchDatiConducentiPast() {
+  try {
+    const response = await fetch(
+      "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidentipast.json"
+    );
+    if (!response.ok) {
+      throw new Error(`Errore HTTP: ${response.status}`);
+    }
+    const data = await response.json();
+
+    const conducentiPast = data.filter((persona) => persona["TipoPersona"] === "Conducente");
+    const percentualeConducentiPast = (conducentiPast.length / data.length) * 100;
+
+    plotIstogrammaConducentiPast(percentualeConducentiPast, "myChartConducentiPast", "Distribution of Drivers and Passenger");
+  } catch (error) {
+    console.error(`Impossibile recuperare i dati: ${error}`);
+  }
+}
+
+// Aggiungi questa funzione per visualizzare il grafico della percentuale di conducenti
+function plotIstogrammaConducentiPast(percentualeConducenti, chartId, titleText) {
+  const canvasElement = document.getElementById(chartId);
+
+  if (!canvasElement) {
+    console.error(`Elemento canvas non trovato con id ${chartId}`);
+    return;
+  }
+
+  new Chart(canvasElement, {
+    type: "pie",
+    data: {
+      labels: ["Altri", "Conducenti"],
+      datasets: [
+        {
+          data: [100 - percentualeConducenti, percentualeConducenti],
+          backgroundColor: ["rgb(220, 220, 220)", "rgb(54, 162, 235)"],
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: titleText,
+        },
+      },
+      responsive: false,
+    },
+  });
+}
+
+// Chiamata alla funzione per ottenere e visualizzare i dati
+fetchDatiConducentiPast();
+
+
+
+
+
+
+//grafivo progressivo 2022
+
+
+  async function fetchDatiProgressivo() {
+  try {
+    const response = await fetch(
+      "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidenti.json"
+    );
+    if (!response.ok) {
+      throw new Error(`Errore HTTP: ${response.status}`);
+    }
+    const data = await response.json();
+
+    // Ottieni un conteggio dei valori unici di "Progressivo"
+    const progressivoCounts = {};
+    data.forEach((persona) => {
+      const progressivo = persona["Progressivo"];
+      progressivoCounts[progressivo] = (progressivoCounts[progressivo] || 0) + 1;
+    });
+
+    // Calcola la percentuale per ogni valore di "Progressivo"
+    const totalEntries = data.length;
+    const percentualiProgressivo = Object.keys(progressivoCounts).map((progressivo) => ({
+      progressivo,
+      percentuale: (progressivoCounts[progressivo] / totalEntries) * 100,
+    }));
+
+    // Chiamata alla funzione per visualizzare il grafico a torta
+    PlotIstogrammaProgressivo(percentualiProgressivo, "myChartProgressivo", "Distribution of Progressivo(2022)");
+  } catch (error) {
+    console.error(`Impossibile recuperare i dati: ${error}`);
+  }
+}
+
+// Aggiungi questa funzione per visualizzare il grafico a torta per "Progressivo"
+function PlotIstogrammaProgressivo(data, chartId, titleText) {
+  const canvasElement = document.getElementById(chartId);
+
+  if (!canvasElement) {
+    console.error(`Elemento canvas non trovato con id ${chartId}`);
+    return;
+  }
+
+  new Chart(canvasElement, {
+    type: "pie",
+    data: {
+      labels: data.map((item) => item.progressivo),
+      datasets: [
+        {
+          data: data.map((item) => item.percentuale),
+          backgroundColor: getRandomColors(data.length),
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: titleText,
+        },
+      },
+      responsive: false,
+    },
+  });
+}
+
+// Funzione per generare colori casuali
+function getRandomColors(count) {
+  const colors = [];
+  for (let i = 0; i < count; i++) {
+    colors.push(`rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`);
+  }
+  return colors;
+}
+
+// Chiamata alla funzione per ottenere e visualizzare i dati
+fetchDatiProgressivo();
+
+
+
+
+
+
+
+
+
+
+
+//grafico progressivo 2008
+
+
+async function fetchDatiProgressivoPast() {
+  try {
+    const response = await fetch(
+      "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidentipast.json"
+    );
+    if (!response.ok) {
+      throw new Error(`Errore HTTP: ${response.status}`);
+    }
+    const data = await response.json();
+
+    // Ottieni un conteggio dei valori unici di "Progressivo"
+    const progressivoCounts = {};
+    data.forEach((persona) => {
+      const progressivo = persona["Progressivo"];
+      progressivoCounts[progressivo] = (progressivoCounts[progressivo] || 0) + 1;
+    });
+
+    // Calcola la percentuale per ogni valore di "Progressivo"
+    const totalEntries = data.length;
+    const percentualiProgressivo = Object.keys(progressivoCounts).map((progressivo) => ({
+      progressivo,
+      percentuale: (progressivoCounts[progressivo] / totalEntries) * 100,
+    }));
+
+    // Chiamata alla funzione per visualizzare il grafico a torta
+    plotIstogrammaProgressivoPast(percentualiProgressivo, "myChartProgressivoPast", "Distribution of Progressivo(2008)");
+  } catch (error) {
+    console.error(`Impossibile recuperare i dati: ${error}`);
+  }
+}
+
+// Aggiungi questa funzione per visualizzare il grafico a torta per "Progressivo"
+function plotIstogrammaProgressivoPast(data, chartId, titleText) {
+  const canvasElement = document.getElementById(chartId);
+
+  if (!canvasElement) {
+    console.error(`Elemento canvas non trovato con id ${chartId}`);
+    return;
+  }
+
+  new Chart(canvasElement, {
+    type: "pie",
+    data: {
+      labels: data.map((item) => item.progressivo),
+      datasets: [
+        {
+          data: data.map((item) => item.percentuale),
+          backgroundColor: getRandomColors(data.length),
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: titleText,
+        },
+      },
+      responsive: false,
+    },
+  });
+}
+
+// Funzione per generare colori casuali
+function getRandomColors(count) {
+  const colors = [];
+  for (let i = 0; i < count; i++) {
+    colors.push(`rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`);
+  }
+  return colors;
+}
+
+// Chiamata alla funzione per ottenere e visualizzare i dati
+fetchDatiProgressivoPast();
+
+
+
+
+//grafico tipo lesione 2022
+async function fetchDatiLesioni() {
+  try {
+    const response = await fetch(
+      "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidenti.json"
+    );
+    if (!response.ok) {
+      throw new Error(`Errore HTTP: ${response.status}`);
+    }
+    const data = await response.json();
+
+    // Raggruppa i dati per il parametro TipoLesione
+    const lesioniCount = {};
+    data.forEach((persona) => {
+      const tipoLesione = persona["TipoLesione"];
+      lesioniCount[tipoLesione] = (lesioniCount[tipoLesione] || 0) + 1;
+    });
+
+    // Calcola la percentuale per ogni tipo di lesione
+    const totalPersonas = data.length;
+    const percentualiLesioni = Object.entries(lesioniCount).map(([tipoLesione, count]) => ({
+      tipoLesione,
+      percentuale: (count / totalPersonas) * 100,
+    }));
+
+    // Chiamata alla funzione per visualizzare il grafico delle lesioni a torta
+    plotTortaLesioni(percentualiLesioni, "myChartLesioni", "Distribution of Injury Types(2022)");
+  } catch (error) {
+    console.error(`Impossibile recuperare i dati: ${error}`);
+  }
+}
+
+// Aggiungi questa funzione per visualizzare il grafico delle lesioni a torta
+function plotTortaLesioni(percentualiLesioni, chartId, titleText) {
+  const canvasElement = document.getElementById(chartId);
+
+  if (!canvasElement) {
+    console.error(`Elemento canvas non trovato con id ${chartId}`);
+    return;
+  }
+
+  const labels = percentualiLesioni.map((entry) => entry.tipoLesione);
+  const data = percentualiLesioni.map((entry) => entry.percentuale);
+
+  const colori = [
+    "rgb(255, 99, 132)",
+    "rgb(54, 162, 235)",
+    "rgb(255, 205, 86)",
+    "rgb(75, 192, 192)",
+    "rgb(153, 102, 255)",
+    "rgb(255, 159, 64)",
+    // Aggiungi altri colori se necessario
+  ];
+
+  new Chart(canvasElement, {
+    type: "pie",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          data: data,
+          backgroundColor: colori.slice(0, labels.length), // Usa solo i primi N colori, dove N è il numero di etichette
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: titleText,
+        },
+      },
+      responsive: false,
+    },
+  });
+}
+
+// Chiamata alla funzione per ottenere e visualizzare i dati
+fetchDatiLesioni();
+
+//grafico tipo lesioni 2008
+async function fetchDatiLesioniPast() {
+  try {
+    const response = await fetch(
+      "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidentipast.json"
+    );
+    if (!response.ok) {
+      throw new Error(`Errore HTTP: ${response.status}`);
+    }
+    const data = await response.json();
+
+    // Raggruppa i dati per il parametro TipoLesione
+    const lesioniCount = {};
+    data.forEach((persona) => {
+      const tipoLesione = persona["TipoLesione"];
+      lesioniCount[tipoLesione] = (lesioniCount[tipoLesione] || 0) + 1;
+    });
+
+    // Calcola la percentuale per ogni tipo di lesione
+    const totalPersonas = data.length;
+    const percentualiLesioni = Object.entries(lesioniCount).map(([tipoLesione, count]) => ({
+      tipoLesione,
+      percentuale: (count / totalPersonas) * 100,
+    }));
+
+    // Chiamata alla funzione per visualizzare il grafico delle lesioni a torta
+    plotTortaLesioniPast(percentualiLesioni, "myChartLesioniPast", "Distribution of Injury Types (2008)");
+  } catch (error) {
+    console.error(`Impossibile recuperare i dati: ${error}`);
+  }
+}
+
+// Aggiungi questa funzione per visualizzare il grafico delle lesioni a torta (Past)
+function plotTortaLesioniPast(percentualiLesioni, chartId, titleText) {
+  const canvasElement = document.getElementById(chartId);
+
+  if (!canvasElement) {
+    console.error(`Elemento canvas non trovato con id ${chartId}`);
+    return;
+  }
+
+  const labels = percentualiLesioni.map((entry) => entry.tipoLesione);
+  const data = percentualiLesioni.map((entry) => entry.percentuale);
+
+  const colori = [
+    "rgb(255, 99, 132)",
+    "rgb(54, 162, 235)",
+    "rgb(255, 205, 86)",
+    "rgb(75, 192, 192)",
+    "rgb(153, 102, 255)",
+    "rgb(255, 159, 64)",
+    // Aggiungi altri colori se necessario
+  ];
+
+  new Chart(canvasElement, {
+    type: "pie",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          data: data,
+          backgroundColor: colori.slice(0, labels.length), // Usa solo i primi N colori, dove N è il numero di etichette
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: titleText,
+        },
+      },
+      responsive: false,
+    },
+  });
+}
+
+// Chiamata alla funzione per ottenere e visualizzare i dati (Past)
+fetchDatiLesioniPast();
+
+
+
+
+
+
+//grafico tipo cinturacascoutilizzato 2022
+
+async function fetchDatiCinturaCasco() {
+  try {
+    const response = await fetch(
+      "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidenti.json"
+    );
+    if (!response.ok) {
+      throw new Error(`Errore HTTP: ${response.status}`);
+    }
+    const data = await response.json();
+
+    // Raggruppa i dati per il parametro CinturaCascoUtilizzato
+    const cinturaCascoCount = {};
+    data.forEach((persona) => {
+      const cinturaCasco = persona["CinturaCascoUtilizzato"];
+      cinturaCascoCount[cinturaCasco] = (cinturaCascoCount[cinturaCasco] || 0) + 1;
+    });
+
+    // Calcola la percentuale per ogni valore di CinturaCascoUtilizzato
+    const totalPersonas = data.length;
+    const percentualiCinturaCasco = Object.entries(cinturaCascoCount).map(([cinturaCasco, count]) => ({
+      cinturaCasco,
+      percentuale: (count / totalPersonas) * 100,
+    }));
+
+    // Chiamata alla funzione per visualizzare il grafico della cintura/casco
+    plotTortaCinturaCasco(percentualiCinturaCasco, "myChartCinturaCasco", "Distribution of Seatbelt/Helmet Usage(2022)");
+  } catch (error) {
+    console.error(`Impossibile recuperare i dati: ${error}`);
+  }
+}
+
+// Aggiungi questa funzione per visualizzare il grafico della cintura/casco
+function plotTortaCinturaCasco(percentualiCinturaCasco, chartId, titleText) {
+  const canvasElement = document.getElementById(chartId);
+
+  if (!canvasElement) {
+    console.error(`Elemento canvas non trovato con id ${chartId}`);
+    return;
+  }
+
+  const labels = percentualiCinturaCasco.map((entry) => entry.cinturaCasco);
+  const data = percentualiCinturaCasco.map((entry) => entry.percentuale);
+
+  const colori = [
+    "rgb(255, 99, 132)",
+    "rgb(54, 162, 235)",
+    "rgb(255, 205, 86)",
+    "rgb(75, 192, 192)",
+    "rgb(153, 102, 255)",
+    "rgb(255, 159, 64)",
+    // Aggiungi altri colori se necessario
+  ];
+
+  new Chart(canvasElement, {
+    type: "pie",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          data: data,
+          backgroundColor: colori.slice(0, labels.length), // Usa solo i primi N colori, dove N è il numero di etichette
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: titleText,
+        },
+      },
+      responsive: false,
+    },
+  });
+}
+
+// Chiamata alla funzione per ottenere e visualizzare i dati della cintura/casco
+fetchDatiCinturaCasco();
+
+
+
+
+
+//grafico tipo cinturacascoutilizzato 2022
+async function fetchDatiCinturaCascoPast() {
+  try {
+    const response = await fetch(
+      "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidentipast.json"
+    );
+    if (!response.ok) {
+      throw new Error(`Errore HTTP: ${response.status}`);
+    }
+    const data = await response.json();
+
+    // Raggruppa i dati per il parametro CinturaCascoUtilizzato
+    const cinturaCascoCount = {};
+    data.forEach((persona) => {
+      const cinturaCasco = persona["CinturaCascoUtilizzato"];
+      cinturaCascoCount[cinturaCasco] = (cinturaCascoCount[cinturaCasco] || 0) + 1;
+    });
+
+    // Calcola la percentuale per ogni valore di CinturaCascoUtilizzato
+    const totalPersonas = data.length;
+    const percentualiCinturaCasco = Object.entries(cinturaCascoCount).map(([cinturaCasco, count]) => ({
+      cinturaCasco,
+      percentuale: (count / totalPersonas) * 100,
+    }));
+
+    // Chiamata alla funzione per visualizzare il grafico della cintura/casco (Past)
+    plotTortaCinturaCascoPast(percentualiCinturaCasco, "myChartCinturaCascoPast", "Distribution of Seatbelt/Helmet Usage (2008)");
+  } catch (error) {
+    console.error(`Impossibile recuperare i dati: ${error}`);
+  }
+}
+
+// Aggiungi questa funzione per visualizzare il grafico della cintura/casco (Past)
+function plotTortaCinturaCascoPast(percentualiCinturaCasco, chartId, titleText) {
+  const canvasElement = document.getElementById(chartId);
+
+  if (!canvasElement) {
+    console.error(`Elemento canvas non trovato con id ${chartId}`);
+    return;
+  }
+
+  const labels = percentualiCinturaCasco.map((entry) => entry.cinturaCasco);
+  const data = percentualiCinturaCasco.map((entry) => entry.percentuale);
+
+  const colori = [
+    "rgb(255, 99, 132)",
+    "rgb(54, 162, 235)",
+    "rgb(255, 205, 86)",
+    "rgb(75, 192, 192)",
+    "rgb(153, 102, 255)",
+    "rgb(255, 159, 64)",
+    // Aggiungi altri colori se necessario
+  ];
+
+  new Chart(canvasElement, {
+    type: "pie",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          data: data,
+          backgroundColor: colori.slice(0, labels.length), // Usa solo i primi N colori, dove N è il numero di etichette
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: titleText,
+        },
+      },
+      responsive: false,
+    },
+  });
+}
+
+// Chiamata alla funzione per ottenere e visualizzare i dati della cintura/casco (Past)
+fetchDatiCinturaCascoPast();
+
+
   </script>
 </body>
 
 <style>
+  
   main {
     text-align: center;
     display: flex;
@@ -359,10 +1034,28 @@ function myFunction() {
       padding: 15px; /* Modifica il padding se necessario */
     }
 
+    .third-group {
+    background-color: #d9d9d9; /* Cambia il colore di sfondo */
+    padding: 15px; /* Modifica il padding se necessario */
+ }
+ .fourth-group {
+    background-color: #d9d9d9; /* Cambia il colore di sfondo */
+    padding: 15px; /* Modifica il padding se necessario */
+ }
+ .fifth-group {
+    background-color: #d9d9d9; /* Cambia il colore di sfondo */
+    padding: 15px; /* Modifica il padding se necessario */
+ }
+ .six-group {
+    background-color: #d9d9d9; /* Cambia il colore di sfondo */
+    padding: 15px; /* Modifica il padding se necessario */
+ }
+ 
   canvas {
     border: 1px solid #ccc;
     margin-bottom: 20px;
     max-width: 100%; /* Adapts canvas size */
     border-radius: 5px;
   }
+
 </style>
