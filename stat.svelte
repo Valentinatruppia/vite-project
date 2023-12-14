@@ -4,6 +4,24 @@
   require(Menu);
 </script> -->
 <script>
+   import { onMount } from "svelte";
+
+  onMount(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  });
+
+  function handleKeyPress(event) {
+    if (event.key === "Escape") {
+      goBack();
+    }
+  }
+
+  function goBack() {
+    window.history.back();
+  }
 function myFunction() {
   
         window.location.href = '../index.html';
@@ -12,11 +30,11 @@ function myFunction() {
 </script>
 <main>
   <h1>CRASH ANALYZER</h1>
-  <section class="content">
+  <!-- <section class="content">
     <button onclick="myFunction()">Back to home</button>
-  </section>
-  <!--   <Menu />
-   -->
+
+    <Menu />
+  </section> -->
 </main>
 <body>   
   <meta charset="utf-8" />
@@ -26,10 +44,11 @@ function myFunction() {
   
   <div class="buttons-container">
     <button type="button" >Maschi e Femmine</button>
-    <button type="button">................</button>
-    <button type="button">----------------</button>
-    <button type="button">''''''''''''''''</button>
-    <button type="button">,,,,,,,,,,,,,,,,</button>
+    <button type="button">Distribution of Incidents by Gravity(Airbag)</button>
+    <button type="button">Distribution of Drivers and Passenger</button>
+    <button type="button">Distribution of Progressivo</button>
+    <button type="button">Distribution of Injury Types</button>
+    <button type="button">Distribution of Seatbelt/Helmet Usage</button>
   </div>
 
   <div class="charts-container first-group">
@@ -947,7 +966,7 @@ fetchDatiCinturaCascoPast();
     min-height: 10vh;
   }
 
- .content {
+/* .content {
     width: 100%;
     max-width: 9000px; 
     padding: 20px;
@@ -958,7 +977,7 @@ fetchDatiCinturaCascoPast();
     margin-bottom: 20px;
     margin-left: 20px;
     margin-right: 20px;
- }
+}*/
   :global(body) {
     overflow-y: scroll;
     font-family: Arial, sans-serif;
@@ -988,16 +1007,11 @@ fetchDatiCinturaCascoPast();
     margin: 20px 0;
   }
 
-  button:focus {
+  button {
     margin: 5px;
     padding: 10px;
     font-size: 14px;
     cursor: pointer;
-    top: 50%;
-    outline-color: transparent;
-    outline-style: solid;
-    box-shadow: 0 0 0 4px #5a01a7;
-    transition: 0.7s;
   }
 
   .charts-container {
