@@ -1,8 +1,4 @@
 <title>STATISTICS</title>
-<!-- <script type="module">
-  import Menu from "../lib/Menu.svelte";
-  require(Menu);
-</script> -->
 <script>
 function myFunction() {
   
@@ -15,21 +11,14 @@ function myFunction() {
   <section class="content">
     <button onclick="myFunction()">Back to home</button>
   </section>
-  <!--   <Menu />
-   -->
 </main>
 <body>   
   <meta charset="utf-8" />
   <header>
     <h1>STATISTICS</h1>
   </header>
-  
-  <div class="buttons-container">
-    <button type="button" >Maschi e Femmine</button>
-    <button type="button">................</button>
-    <button type="button">----------------</button>
-    <button type="button">''''''''''''''''</button>
-    <button type="button">,,,,,,,,,,,,,,,,</button>
+  <div class="charts-container seventh-group">
+    <canvas id="myChartTotIncidenti" width="800" height="300"></canvas>
   </div>
 
   <div class="charts-container first-group">
@@ -57,7 +46,8 @@ function myFunction() {
     <canvas id="myChartCinturaCasco" width="400" height="300"></canvas>
     <canvas id="myChartCinturaCascoPast" width="400" height="300"></canvas>
   </div>
-    
+
+  
     
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -65,9 +55,44 @@ function myFunction() {
 
     let array = [0];
     let arraypast = [0];
-    fetchDati(), fetchDatiPast(),fetchDatiAirbag(),fetchDatiAirbagPast();
+    fetchDatiTotIncidenti(),fetchDati(), fetchDatiPast(),fetchDatiAirbag(),fetchDatiAirbagPast();
     let y = [];
     let yPast = [];
+    let yTotIncidenti = [];
+    
+    //////////////////////////////////////////////////////////////////////////////////
+    async function fetchDatiTotIncidenti() {
+      try {
+        // Effettua la richiesta fetch e attendi la risposta
+        const response = await fetch(
+          "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidenti.json"
+        );
+        if (!response.ok) {
+          throw new Error(`Errore HTTP: ${response.status}`);
+        }
+        const data = await response.json();
+        data.forEach((element) => {
+          array.push(element);
+        }); //popola l'array locale
+
+        const response1 = await fetch(
+          "https://raw.githubusercontent.com/Valentinatruppia/vite-project/main/incidentipast.json"
+        );
+        if (!response1.ok) {
+          throw new Error(`Errore HTTP: ${response1.status}`);
+        }
+        const data1 = await response1.json();
+        data1.forEach((element1) => {
+          arraypast.push(element1);
+        });
+        const tot =array.length;
+        const totPast=arraypast.length;
+        yTotIncidenti = [tot,totPast];
+        PlotIstogrammaTotIncidenti();
+      } catch (error) {
+        console.error(`Impossibile recuperare i dati: ${error}`);
+      }
+    }
     //////////////////////////////////////////////////////////////////////////////////
     async function fetchDati() {
       try {
@@ -91,17 +116,6 @@ function myFunction() {
         );
         y = [Maschi.length, Femmine.length];
         PlotIstogramma();
-        /*
-                console.log("array completo: ",array);
-                const anno=array.filter(a => a["Anno"]===2019);
-                console.log("filtro con anno 2019: ",anno);
-                const giorno=array.filter(g => g["Giorno"]==="Lunedi");
-                console.log("filtro con giorno lunedi: ",giorno);
-                const totale1=array.reduce((accumulatore, smc)=> accumulatore+smc["Totale (Smc)"],1);
-                console.log("reduce smc: ",totale1);
-                const smc=array.filter(smc => smc["Totale (Smc)"]>6641610);
-                console.log("filtro con smc>6641610: ",smc);
-                */
       } catch (error) {
         console.error(`Impossibile recuperare i dati: ${error}`);
       }
@@ -130,17 +144,6 @@ function myFunction() {
         yPast = [MaschiPast.length, FemminePast.length];
         PlotIstogrammaPast();
 
-        /*
-                console.log("array completo: ",array);
-                const anno=array.filter(a => a["Anno"]===2019);
-                console.log("filtro con anno 2019: ",anno);
-                const giorno=array.filter(g => g["Giorno"]==="Lunedi");
-                console.log("filtro con giorno lunedi: ",giorno);
-                const totale1=array.reduce((accumulatore, smc)=> accumulatore+smc["Totale (Smc)"],1);
-                console.log("reduce smc: ",totale1);
-                const smc=array.filter(smc => smc["Totale (Smc)"]>6641610);
-                console.log("filtro con smc>6641610: ",smc);
-            */
       } catch (error) {
         console.error(`Impossibile recuperare i dati: ${error}`);
       }
@@ -203,112 +206,6 @@ function myFunction() {
     }
         //////////////////////////////////////////////////////////////////////////////////////////////
 
-    function PlotIstogramma() {
-      new Chart("myChartMF", {
-        type: "pie",
-        data: {
-          labels: ["Maschi", "Femmine"],
-          datasets: [
-            {
-              label: "Numero incidenti",
-              backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)"],
-              data: y,
-            },
-          ],
-        },
-        options: {
-          plugins: {
-            title: {
-              display: true,
-              text: "Distribution of Incidents by Gender(2022)",
-            },
-          },
-          responsive: false,
-        },
-      });
-    }
-    function PlotIstogrammaPast() {
-      new Chart("myChartMFPast", {
-        type: "pie",
-        data: {
-          labels: ["Maschi", "Femmine"],
-          datasets: [
-            {
-              label: "Numero incidenti",
-              backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)"],
-              data: yPast,
-            },
-          ],
-        },
-        options: {
-          plugins: {
-            title: {
-              display: true,
-              text: "Distribution of Incidents by Gender(2008)",
-            },
-          },
-          responsive: false,
-        },
-      });
-    }
-
-    function PlotIstogrammaAirbag() {
-      new Chart("myChartAirbag", {
-        type: "pie",
-        data: {
-          labels: ["Inesistente", "Esploso", "Inesploso"],
-          datasets: [
-            {
-              label: "Gravita' incidenti(Airbag)",
-              backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(120, 99, 140)"],
-              data: y_Airbag,
-            },
-          ],
-        },
-        options: {
-          plugins: {
-            title: {
-              display: true,
-              text: "Distribution of Incidents by Gravity(Airbag 2022)",
-            },
-          },
-          responsive: false,
-        },
-      });
-    }
-    
-    function PlotIstogrammaAirbagPast() {
-      new Chart("myChartAirbagPast", {
-        type: "pie",
-        data: {
-          labels: ["Inesistente", "Esploso", "Inesploso"],
-          datasets: [
-            {
-              label: "Gravita' incidenti(Airbag)",
-              backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(120, 99, 140)"],
-              data: y_AirbagPast,
-            },
-          ],
-        },
-        options: {
-          plugins: {
-            title: {
-              display: true,
-              text: "Distribution of Incidents by Gravity(Airbag 2008)",
-            },
-          },
-          responsive: false,
-        },
-      });
-    }
-
-
-
-
-
-
-
-//grafico con i conducenti
 
 async function fetchDatiConducenti() {
   try {
@@ -339,7 +236,7 @@ function plotIstogrammaConducenti(percentualeConducenti, chartId, titleText) {
   }
 
   new Chart(canvasElement, {
-    type: "pie",  // Cambiato da "doughnut" a "pie"
+    type: "pie",
     data: {
       labels: ["Altri", "Conducenti"],
       datasets: [
@@ -363,15 +260,6 @@ function plotIstogrammaConducenti(percentualeConducenti, chartId, titleText) {
 
 // Chiamata alla funzione per ottenere e visualizzare i dati
 fetchDatiConducenti();
-
-
-
-
-
-
-
-
-
 
 
 
@@ -513,12 +401,6 @@ function getRandomColors(count) {
 
 // Chiamata alla funzione per ottenere e visualizzare i dati
 fetchDatiProgressivo();
-
-
-
-
-
-
 
 
 
@@ -934,7 +816,130 @@ function plotTortaCinturaCascoPast(percentualiCinturaCasco, chartId, titleText) 
 
 // Chiamata alla funzione per ottenere e visualizzare i dati della cintura/casco (Past)
 fetchDatiCinturaCascoPast();
+function PlotIstogrammaTotIncidenti() {
+      new Chart("myChartTotIncidenti", {
+        type: "bar",
+        data: {
+          labels: ["Incidenti(2022)", "Incidenti(2008)"],
+          datasets: [
+            {
+              label: "Totale incidenti",
+              backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)"],
+              data: yTotIncidenti,
+            },
+          ],
+        },
+        options: {
+          plugins: {
+            title: {
+              display: true,
+              text: "Total of Incsidents(2022-2008)",
+            },
+          },
+          responsive: false,
+        },
+      });
+    }
+    
+function PlotIstogramma() {
+      new Chart("myChartMF", {
+        type: "pie",
+        data: {
+          labels: ["Maschi", "Femmine"],
+          datasets: [
+            {
+              label: "Numero incidenti",
+              backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)"],
+              data: y,
+            },
+          ],
+        },
+        options: {
+          plugins: {
+            title: {
+              display: true,
+              text: "Distribution of Incidents by Gender(2022)",
+            },
+          },
+          responsive: false,
+        },
+      });
+    }
+    function PlotIstogrammaPast() {
+      new Chart("myChartMFPast", {
+        type: "pie",
+        data: {
+          labels: ["Maschi", "Femmine"],
+          datasets: [
+            {
+              label: "Numero incidenti",
+              backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)"],
+              data: yPast,
+            },
+          ],
+        },
+        options: {
+          plugins: {
+            title: {
+              display: true,
+              text: "Distribution of Incidents by Gender(2008)",
+            },
+          },
+          responsive: false,
+        },
+      });
+    }
 
+    function PlotIstogrammaAirbag() {
+      new Chart("myChartAirbag", {
+        type: "pie",
+        data: {
+          labels: ["Inesistente", "Esploso", "Inesploso"],
+          datasets: [
+            {
+              label: "Gravita' incidenti(Airbag)",
+              backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(120, 99, 140)"],
+              data: y_Airbag,
+            },
+          ],
+        },
+        options: {
+          plugins: {
+            title: {
+              display: true,
+              text: "Distribution of Incidents by Gravity(Airbag 2022)",
+            },
+          },
+          responsive: false,
+        },
+      });
+    }
+    
+    function PlotIstogrammaAirbagPast() {
+      new Chart("myChartAirbagPast", {
+        type: "pie",
+        data: {
+          labels: ["Inesistente", "Esploso", "Inesploso"],
+          datasets: [
+            {
+              label: "Gravita' incidenti(Airbag)",
+              backgroundColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(120, 99, 140)"],
+              data: y_AirbagPast,
+            },
+          ],
+        },
+        options: {
+          plugins: {
+            title: {
+              display: true,
+              text: "Distribution of Incidents by Gravity(Airbag 2008)",
+            },
+          },
+          responsive: false,
+        },
+      });
+    }
+//grafico con i conducenti
 
   </script>
 </body>
@@ -1010,13 +1015,13 @@ fetchDatiCinturaCascoPast();
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   .first-group {
-      background-color: #f8f8f8; /* Cambia il colore di sfondo */
+      background-color: #d9d9d9; /* Cambia il colore di sfondo */
       padding: 15px; /* Modifica il padding se necessario */
     }
 
     /* Aggiungi stili specifici per il secondo gruppo di grafici */
     .second-group {
-      background-color: #ececec; /* Cambia il colore di sfondo */
+      background-color: #d9d9d9; /* Cambia il colore di sfondo */
       padding: 15px; /* Modifica il padding se necessario */
     }
 
@@ -1037,6 +1042,10 @@ fetchDatiCinturaCascoPast();
     padding: 15px; /* Modifica il padding se necessario */
  }
  
+ .seventh-group {
+    background-color: #d9d9d9; /* Cambia il colore di sfondo */
+    padding: 15px; /* Modifica il padding se necessario */
+ }
   canvas {
     border: 1px solid #ccc;
     margin-bottom: 20px;
