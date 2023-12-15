@@ -706,8 +706,12 @@
         const cinturaCascoCount = {};
         data.forEach((persona) => {
           const cinturaCasco = persona["CinturaCascoUtilizzato"];
-          cinturaCascoCount[cinturaCasco] =
-            (cinturaCascoCount[cinturaCasco] || 0) + 1;
+
+          // Aggiungi la condizione per escludere i valori null
+          if (cinturaCasco !== null) {
+            cinturaCascoCount[cinturaCasco] =
+              (cinturaCascoCount[cinturaCasco] || 0) + 1;
+          }
         });
 
         // Calcola la percentuale per ogni valore di CinturaCascoUtilizzato
@@ -753,7 +757,6 @@
         "rgb(75, 192, 192)",
         "rgb(153, 102, 255)",
         "rgb(255, 159, 64)",
-        // Aggiungi altri colori se necessario
       ];
 
       new Chart(canvasElement, {
@@ -863,6 +866,11 @@
             title: {
               display: true,
               text: titleText,
+            },
+          },
+          datalabels: {
+            formatter: (value, context) => {
+              return `${value.toFixed(2)}%`;
             },
           },
           responsive: false,
@@ -1021,7 +1029,7 @@
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(66, 56, 56, 1);
     border-radius: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 20px;
     margin-left: 20px;
     margin-right: 20px;
@@ -1046,18 +1054,14 @@
 
   h1 {
     font-size: 2em;
-    margin: 0;
-  }
-
-  .buttons-container {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
+    margin-top: 15px;
+    
   }
 
   button:focus {
-    margin: 5px;
+    margin-top: 25px;
     padding: 10px;
+    align-self: center;
     font-size: 14px;
     cursor: pointer;
     top: 50%;
